@@ -10,7 +10,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Wczytanie pliku .ui
+        # Loading .ui file
         ui_file = QtCore.QFile("DGD_Interface/DGD_GUI.ui")
         if not ui_file.open(QtCore.QFile.ReadOnly):
             print("Nie udało się otworzyć pliku .ui")
@@ -20,7 +20,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
         self.window = loader.load(ui_file)
         ui_file.close()
 
-        # Referencje do elementów GUI
+        # GUI elements
         self.resolution_combo = self.window.findChild(QtWidgets.QComboBox, "ResolutionComboBox")
         self.source_combo = self.window.findChild(QtWidgets.QComboBox, "SourceDataComboBox")
         self.start_date_edit = self.window.findChild(QtWidgets.QDateEdit, "StartDateEdit")
@@ -34,7 +34,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
         self.progress_bar = self.window.findChild(QtWidgets.QProgressBar, "progressBar")
         self.start_btn = self.window.findChild(QtWidgets.QPushButton, "pushButton")
 
-        # Podłączenie sygnałów
+        # Signals
         self.select_all_btn.clicked.connect(self.select_all)
         self.clear_all_btn.clicked.connect(self.clear_all)
         self.output_button.clicked.connect(self.choose_folder)
@@ -42,7 +42,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
 
         self.window.show()
 
-    # Funkcje pomocnicze
+    # Help function
     def select_all(self):
         self.countries_list.selectAll()
 
@@ -54,20 +54,21 @@ class DownloaderApp(QtWidgets.QMainWindow):
         if folder:
             self.output_line.setText(folder)
 
-    # Funkcja pobierająca dane
-    def downloading_data(self, start: str, end: str, resolution: str, source: str, stations: list):
+    # Downloading with Intermagnet
+    def downloading_data_intermagnet(self, start: str, end: str, resolution: str, stations: list):
         startTime = datetime.strptime(start, "%Y-%m-%d")
         endTime = datetime.strptime(end, "%Y-%m-%d")
-        final_dataframe = pd.DataFrame()
 
         delta = endTime - startTime
         total_days = delta.days + 1
         step = 0
 
-        for i in range(total_days):
-            date = (startTime + timedelta(days=i)).strftime("%Y-%m-%d")
-            print("Pobieram:", date)
-            for station in stations:
+        for station in stations:
+            print(station)
+            final_dataframe = pd.DataFrame()
+            for i in range(total_days):
+                date = (startTime + timedelta(days=i)).strftime("%Y-%m-%d")
+                print("Pobieram:", date)
                 data_link = (
                     f"https://imag-data.bgs.ac.uk/GIN_V1/GINServices?"
                     f"Request=GetData&format=HTML&testObsys=0"
@@ -97,13 +98,12 @@ class DownloaderApp(QtWidgets.QMainWindow):
             percent = int(step / total_days * 100)
             self.progress_bar.setValue(percent)
             QtWidgets.QApplication.processEvents()
+            print(final_dataframe)
 
-        return final_dataframe
-
-    # Obsługa przycisku Start
+    # Start button
     def on_start_clicked(self):
         resolution = self.resolution_combo.currentText()
-        source = self.source_combo.currentText()
+        source = self.source_combo.currentIndex()
         start_date = self.start_date_edit.date().toString("yyyy-MM-dd")
         end_date = self.end_date_edit.date().toString("yyyy-MM-dd")
 
@@ -113,11 +113,14 @@ class DownloaderApp(QtWidgets.QMainWindow):
             selected.append(station)
 
         if not selected:
-            self.error_messages.setText("❌ Brak wybranych stacji!")
+            self.error_messages.setText("Not selected stations!")
         else:
-            self.error_messages.setText("✅ Wybrano stacje: " + ", ".join(selected))
-            df = self.downloading_data(start_date, end_date, resolution, source, selected)
-            print(df)
+            self.error_messages.setText("Selected stations: " + ", ".join(selected))
+            match source:
+                case 0:
+                    self.downloading_data_intermagnet(start_date, end_date, resolution, selected)
+                case 1:
+                    pass
 
 
 def main():
