@@ -1,6 +1,7 @@
 ﻿from sys import exit, argv
 from datetime import datetime, timedelta
 from io import StringIO
+from numpy import empty
 import requests
 import pandas as pd
 from PySide6 import QtWidgets, QtCore, QtUiTools
@@ -55,7 +56,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
             self.output_line.setText(folder)
 
     # Downloading with Intermagnet
-    def downloading_data_intermagnet(self, start: str, end: str, resolution: str, stations: list):
+    def downloading_data_intermagnet(self, start: str, end: str, resolution: str, stations: list[str], output: str):
         startTime = datetime.strptime(start, "%Y-%m-%d")
         endTime = datetime.strptime(end, "%Y-%m-%d")
 
@@ -98,7 +99,9 @@ class DownloaderApp(QtWidgets.QMainWindow):
             percent = int(step / total_days * 100)
             self.progress_bar.setValue(percent)
             QtWidgets.QApplication.processEvents()
-            print(final_dataframe)
+
+            with pd.ExcelWriter(rf'{output}/{station}.xlsx', mode='a', engine='openpyxl') as writer:
+                final_dataframe.to_excel(writer, sheet_name=station)
 
     # Start button
     def on_start_clicked(self):
@@ -106,6 +109,7 @@ class DownloaderApp(QtWidgets.QMainWindow):
         source = self.source_combo.currentIndex()
         start_date = self.start_date_edit.date().toString("yyyy-MM-dd")
         end_date = self.end_date_edit.date().toString("yyyy-MM-dd")
+        output = self.output_line.text()
 
         selected = []
         for idx in self.countries_list.selectionModel().selectedRows():
@@ -114,11 +118,15 @@ class DownloaderApp(QtWidgets.QMainWindow):
 
         if not selected:
             self.error_messages.setText("Not selected stations!")
+        elif not output.strip():
+            self.error_messages.setText("Not selected output file!")
+        elif start_date > end_date:
+            self.error_messages.setText("The end date is earlier than the download start date!")
         else:
             self.error_messages.setText("Selected stations: " + ", ".join(selected))
             match source:
                 case 0:
-                    self.downloading_data_intermagnet(start_date, end_date, resolution, selected)
+                    self.downloading_data_intermagnet(start_date, end_date, resolution, selected, output)
                 case 1:
                     pass
 
