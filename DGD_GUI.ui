@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Downloader Geomagnetic Data</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+
+    <!-- TITLE -->
+    <item>
+     <widget class="QLabel" name="Title">
+      <property name="styleSheet">
+       <string notr="true">font-size: 20pt; font-weight: bold; color: #1976d2;</string>
+      </property>
+      <property name="text">
+       <string>Downloader Geomagnetic Data</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+
+    <!-- START DATE -->
+    <item>
+     <layout class="QVBoxLayout" name="startDateLayout">
+      <item>
+       <widget class="QLabel" name="StartDateLabel">
+        <property name="text">
+         <string>Start Date</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="StartDateEdit">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- END DATE -->
+    <item>
+     <layout class="QVBoxLayout" name="endDateLayout">
+      <item>
+       <widget class="QLabel" name="EndDateLabel">
+        <property name="text">
+         <string>End Date</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="EndDateEdit">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- DATE RANGES SECTION -->
+    <item>
+     <layout class="QVBoxLayout" name="dateRangesLayout">
+
+      <item>
+       <widget class="QLabel" name="DateRangesLabel">
+        <property name="text">
+         <string>Date ranges</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QTableWidget" name="DateRangesTable">
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <column>
+         <property name="text">
+          <string>Start</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>End</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+
+      <item>
+       <layout class="QHBoxLayout" name="dateRangesButtons">
+        <item>
+         <widget class="QPushButton" name="AddRangeButton">
+          <property name="text">
+           <string>Add range</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="RemoveRangeButton">
+          <property name="text">
+           <string>Remove selected</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+
+     </layout>
+    </item>
+
+    <!-- RESOLUTION -->
+    <item>
+     <layout class="QVBoxLayout" name="resolutionLayout">
+      <item>
+       <widget class="QLabel" name="ResolutionLabel">
+        <property name="text">
+         <string>Resolution</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="ResolutionComboBox">
+        <item><property name="text"><string>minute</string></property></item>
+        <item><property name="text"><string>second</string></property></item>
+        <item><property name="text"><string>10-second</string></property></item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- SOURCE -->
+    <item>
+     <layout class="QVBoxLayout" name="sourceLayout">
+      <item>
+       <widget class="QLabel" name="SourceDataLabel">
+        <property name="text">
+         <string>Source Data</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="SourceDataComboBox">
+        <item><property name="text"><string>Intermagnet</string></property></item>
+        <item><property name="text"><string>Image</string></property></item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- STATIONS TABLE -->
+    <item>
+     <layout class="QHBoxLayout" name="countriesLayout">
+
+      <item>
+       <widget class="QTableWidget" name="CountriesTable">
+        <property name="editTriggers"><set>QAbstractItemView::AnyKeyPressed</set></property>
+        <property name="selectionMode"><enum>QAbstractItemView::MultiSelection</enum></property>
+        <property name="selectionBehavior"><enum>QAbstractItemView::SelectRows</enum></property>
+        <property name="sortingEnabled"><bool>true</bool></property>
+        <property name="rowCount"><number>11</number></property>
+        <property name="columnCount"><number>2</number></property>
+
+        <column><property name="text"><string>Station</string></property></column>
+        <column><property name="text"><string>Country</string></property></column>
+
+        <item row="0" column="0"><property name="text"><string>BEL</string></property></item>
+        <item row="0" column="1"><property name="text"><string>Poland</string></property></item>
+
+        <item row="1" column="0"><property name="text"><string>HLP</string></property></item>
+        <item row="1" column="1"><property name="text"><string>Poland</string></property></item>
+
+        <item row="2" column="0"><property name="text"><string>KEV</string></property></item>
+        <item row="2" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="3" column="0"><property name="text"><string>SOD</string></property></item>
+        <item row="3" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="4" column="0"><property name="text"><string>OUJ</string></property></item>
+        <item row="4" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="5" column="0"><property name="text"><string>HAN</string></property></item>
+        <item row="5" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="6" column="0"><property name="text"><string>NUR</string></property></item>
+        <item row="6" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="7" column="0"><property name="text"><string>SUW</string></property></item>
+        <item row="7" column="1"><property name="text"><string>Poland</string></property></item>
+
+        <item row="8" column="0"><property name="text"><string>HRN</string></property></item>
+        <item row="8" column="1"><property name="text"><string>Norway</string></property></item>
+
+        <item row="9" column="0"><property name="text"><string>IVA</string></property></item>
+        <item row="9" column="1"><property name="text"><string>Finland</string></property></item>
+
+        <item row="10" column="0"><property name="text"><string>TAR</string></property></item>
+        <item row="10" column="1"><property name="text"><string>Estonia</string></property></item>
+
+       </widget>
+      </item>
+
+      <item>
+       <layout class="QVBoxLayout" name="countriesButtonsLayout">
+        <item><widget class="QPushButton" name="SelectAllButton"><property name="text"><string>Select All</string></property></widget></item>
+        <item><widget class="QPushButton" name="ClearAllButton"><property name="text"><string>Clear All</string></property></widget></item>
+       </layout>
+      </item>
+
+     </layout>
+    </item>
+
+    <!-- OUTPUT FOLDER -->
+    <item>
+     <layout class="QHBoxLayout" name="outputLayout">
+      <item><widget class="QLineEdit" name="OutputLineEdit"><property name="placeholderText"><string>Output Folder</string></property></widget></item>
+      <item><widget class="QToolButton" name="OutputButton"><property name="text"><string>...</string></property></widget></item>
+     </layout>
+    </item>
+
+    <!-- PROGRESS BAR -->
+    <item>
+     <widget class="QFrame" name="progressFrame">
+      <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
+      <layout class="QVBoxLayout" name="progressLayout">
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value"><number>0</number></property>
+         <property name="format"><string>Progress %p%</string></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <!-- START BUTTON -->
+    <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text"><string>Start Downloading</string></property>
+     </widget>
+    </item>
+
+    <!-- ERROR MESSAGES -->
+    <item>
+     <widget class="QTextEdit" name="ErrorMessages">
+      <property name="readOnly"><bool>true</bool></property>
+      <property name="placeholderText"><string>Error messages will appear here...</string></property>
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
