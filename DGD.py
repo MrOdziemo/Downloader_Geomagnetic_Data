@@ -1,5 +1,5 @@
 ﻿from sys import argv, exit
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from io import StringIO
 
 import requests
@@ -23,7 +23,14 @@ class DownloadWorker(QObject):
         self.output = output
 
     def run(self):
-        total_tasks = len(self.stations) * len(self.ranges)
+        days = 0
+        for rang in self.ranges:
+            date1 = datetime.strptime(rang[0], "%Y-%m-%d")
+            date2 = datetime.strptime(rang[1], "%Y-%m-%d")
+            days =+ (date2 - date1).days + 1
+
+        total_tasks = len(self.stations) * len(self.ranges) * days
+        print(total_tasks, days)
         done = 0
 
         for station in self.stations:
@@ -89,7 +96,7 @@ class DownloadWorker(QObject):
             f"&orientation=native"
         )
 
-        r = requests.get(link, timeout=10)
+        r = requests.get(link, timeout=1000)
         r.raise_for_status()
         tables = pd.read_html(StringIO(r.text))
 
@@ -117,7 +124,7 @@ class DownloadWorker(QObject):
             f"starttime={date_fmt}&length=1440&format=text&sample_rate={sample}&stations={station}"
         )
 
-        r = requests.get(link, timeout=10)
+        r = requests.get(link, timeout=1000)
         r.raise_for_status()
 
         df = pd.read_csv(StringIO(r.text), header=None)
